@@ -9,6 +9,7 @@ import VueRouter from "vue-router";
 import Index from "./Index";
 import { configAuth } from './auth'
 import router from "./router";
+import store from "./store/index";
 
 // Set Vue globally
 window.Vue = Vue
@@ -30,6 +31,7 @@ Vue.use(VueAuth, configAuth);
 
 const app = new Vue({
     router,
+    store,
     render: (h) => h(Index),
 });
 
