@@ -3,6 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategorieController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,9 +39,28 @@ Route::prefix('v1')->group(function () {
         Route::middleware('auth:api')->group(function () {
             // Get user info
             Route::get('user', [AuthController::class, 'user']);
-
+            
             // Logout user from application
             Route::post('logout', [AuthController::class, 'logout']);
+            
+            // Products request
+            Route::prefix('products')->group(function () {
+                Route::get('/', [ProductController::class, 'index']);
+
+                Route::post('add', [ProductController::class, 'create']);
+    
+                Route::get('show/{id}', [ProductController::class, 'show']);
+
+                Route::put('update/{id}', [ProductController::class, 'update']);
+    
+                Route::delete('delete/{id}', [ProductController::class, 'destroy']);
+            });
+
+            // Categories request
+            Route::prefix('categories')->group(function () {
+                Route::get('/', [CategorieController::class, 'index']);
+            });
+
         });
     });
 });

@@ -6,6 +6,10 @@ import About from './pages/About'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
+import Index from './pages/DashboardViews/Index'
+import Management from './pages/DashboardViews/Management'
+
+
 
 // Routes
 const routes = [
@@ -45,6 +49,18 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: Dashboard,
+    children: [
+      {
+        path: '',
+        component: Index,
+        name: 'index'
+      },
+      {
+        path: '/management',
+        component: Management,
+        name: 'management'
+      },
+    ],
     meta: {
       auth: true
     }
