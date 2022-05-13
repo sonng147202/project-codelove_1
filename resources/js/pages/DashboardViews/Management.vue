@@ -28,9 +28,12 @@
                 <td>{{item.color}}</td>
                 <td>{{item.size}}</td>
                 <td>
-                    <button type="button" class="btn btn-primary">Edit</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" :data-target="'#formUpdateProduct' + item.id">Edit</button>
+                    <button type="button" class="btn btn-danger" @click="DELETE_PRODUCT(item.id)">Delete</button>
                 </td>
+                <ModalEditProduct 
+                    :productItem="item" 
+                />
             </tr>
         </tbody>
     </table>
@@ -46,7 +49,7 @@ import ModalEditProduct from "../../components/Modals/EditProduct.vue";
 
 export default {
     computed: {
-        ...mapGetters('StoreProducts'),
+        ...mapGetters(['StoreProducts']),
     },
     data() {
         return {
@@ -54,7 +57,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['FETCH']),
+        ...mapActions(['FETCH', 'DELETE_PRODUCT']),
     },
 	components: {
 		ModalAddProduct,

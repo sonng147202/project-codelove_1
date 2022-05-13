@@ -2,15 +2,13 @@ import axios from "axios";
 
 import {
 	FETCH,
-    FETCH_ONE,
     ADD_PRODUCT,
-    EDIT_PRODUCT,
+    UPDATE_PRODUCT,
     DELETE_PRODUCT
 } from "../actions/product";
 
 const state = {
 	products: [],
-    product: {},
 };
 
 const getters = {
@@ -23,9 +21,6 @@ const mutations = {
 	[FETCH]: (state, products) => {
         state.products = products;
 	},
-    [FETCH_ONE]: (state, product) => {
-        state.product = product;
-	},
 };
 
 const actions = {
@@ -34,28 +29,22 @@ const actions = {
                 .then(response => commit('FETCH', response.data))
                 .catch(error => console.log(error));
     },
-    [FETCH_ONE]: ({ commit }, id) => {
-        return axios.get(`/auth/products/show/${id}`)
-                .then(response => commit('FETCH_ONE', response.data))
-                .catch(error => console.log(error));
-    },
     [ADD_PRODUCT]: ({}, data) => {
-        return axios.post(`/auth/products/add`, data);
+        return axios.post(`/auth/products/add`, data)
+            .then(() => this.dispatch('FETCH'))
+            .catch(error => console.log(error));
+
+    },
+    [UPDATE_PRODUCT]: ({}, obj) => {
+        return axios.post(`/auth/products/update/${obj.id}`, obj.data)
+            .then(() => this.dispatch('FETCH'))
+            .catch(error => console.log(error));
     },
     [DELETE_PRODUCT]({}, id) {
-        axios.delete(`delete/${id}`)
-            .then(() => this.dispatch('fetch'))
-            .catch();
+        axios.delete(`/auth/products/delete/${id}`)
+            .then(() => this.dispatch('FETCH'))
+            .catch(error => console.log(error));
     },
-    editUser({}, user) {
-        axios.put(`${RESOURCE_USER}/${user.id}`, {
-            name: user.name,
-            email: user.email,
-            password: user.password,
-        })
-            .then(() => this.dispatch('fetch'));
-    },
-    
 };
 
 export default {

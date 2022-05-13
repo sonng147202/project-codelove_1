@@ -49,9 +49,36 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function update ($id)
+    public function update (Request $request, $id)
     {
-        echo 'productEditing'.$id;
+        $this->validate($request,[
+            'category_id' => 'required',
+            'name' => 'required',
+            'price' => 'required',
+            'color' => 'required',
+            'size' => 'required',
+        ]);
+
+        if($request->hasFile('img')){
+            $file = $request->file('img');
+            $filename = 'product_'.time().'.'.$file->extension();
+            $file->move(public_path('uploads'), $filename);
+        } else {
+            return response()->json(['error' => 'Image file not found!!!'], 422);      
+        }
+
+        $product = Product::find($id);
+
+        $product->update([
+            'category_id' => $request->input('category_id'),
+            'name' => $request->input('name'),
+            'avatar' => $filename,
+            'price' => $request->input('price'),
+            'color' => $request->input('color'),
+            'size' => $request->input('size'),
+        ]);
+
+        return response()->json('Product updated!');
     }
 
     public function destroy ($id)
